@@ -79,3 +79,13 @@ If you'd like to contribute to the project, please fork the repository and use a
 
 - Inspired by the classic Breakout arcade game.
 - Created using Python's Turtle graphics library.
+
+---
+
+### Visit:
+
+`LinkedIn` - [Visit](https://linkedin.com/in/anshmnsoni)
+
+---
+
+### Thank You
