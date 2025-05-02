@@ -1,4 +1,5 @@
 from turtle import Turtle
+import random
 
 class Ball(Turtle):
     def __init__(self):
@@ -9,6 +10,7 @@ class Ball(Turtle):
         self.color('red')
         self.x_move = 15
         self.y_move = 15
+        self.move_speed = 0.1  # Added speed control for difficulty increase
 
     def move(self):
         new_x = self.xcor() + self.x_move
@@ -24,3 +26,8 @@ class Ball(Turtle):
     def reset_position(self):
         self.goto(0, -160)
         self.y_bounce()
+        
+    def increase_speed(self):
+        """Increase ball speed slightly to make game progressively harder"""
+        if self.move_speed > 0.03:  # Don't make it too fast
+            self.move_speed *= 0.9

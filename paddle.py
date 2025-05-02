@@ -1,28 +1,24 @@
-from turtle import Turtle, Screen
+from turtle import Turtle
 
 POSITION = [(-60,-300), (-40,-300), (-20,-300), (0,-300)]
 
-screen = Screen()
-
-
 class Paddle(Turtle):
-    def __init__(self):
+    def __init__(self, screen):
         super().__init__()
         self.segments = []
+        self.screen = screen  # Store screen reference instead of creating a new one
         self.create_reflector()
         
-        
     def create_reflector(self):
-        screen.tracer(0)
+        self.screen.tracer(0)
         for seg in POSITION:
             new_turtle = Turtle('square')
             new_turtle.penup()
             new_turtle.color('white')  
             new_turtle.goto(seg)  
             self.segments.append(new_turtle)
-        screen.update()
+        self.screen.update()
             
-    
     def on_right(self):
         if self.segments[-1].xcor() < 470:
             for turtles in range(len(self.segments) - 1):
@@ -30,9 +26,8 @@ class Paddle(Turtle):
                 y = self.segments[turtles + 1].ycor()
                 self.segments[turtles].goto(x, y)
             self.segments[-1].fd(20)
-            screen.update()
+            self.screen.update()
         
-    
     def on_left(self):
         if self.segments[0].xcor() > -470:
             self.segments[0].setheading(180)
@@ -42,4 +37,4 @@ class Paddle(Turtle):
                 self.segments[turtles].goto(x, y)
             self.segments[0].fd(20)
             self.segments[0].setheading(0)
-            screen.update()
+            self.screen.update()
