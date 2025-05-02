@@ -54,8 +54,17 @@ screen.update()
 
 # Setup keyboard controls
 screen.listen()
-screen.onkey(key='Left', fun=paddle.on_left)
+# Single key press movement
 screen.onkey(key='Right', fun=paddle.on_right)
+screen.onkey(key='Left', fun=paddle.on_left)
+
+# Continuous movement for smoother control
+screen.onkeypress(key='Right', fun=paddle.start_move_right)
+screen.onkeyrelease(key='Right', fun=paddle.stop_move_right)
+screen.onkeypress(key='Left', fun=paddle.start_move_left)
+screen.onkeyrelease(key='Left', fun=paddle.stop_move_left)
+
+# Keep the pause controls
 screen.onkey(key='p', fun=lambda: pause_game())
 screen.onkey(key='space', fun=lambda: resume_game())
 
@@ -97,9 +106,16 @@ while game_is_on:
     if ball.ycor() > 320:
         ball.y_bounce()
         
-    # Detect collision with paddle
-    for seg in paddle.segments:
-        if ball.distance(seg) < 25 and ball.ycor() < -270:
+    # Detect collision with paddle - UPDATED for single paddle
+    if ball.distance(paddle) < 50 and ball.ycor() < -280:
+        # Calculate bounce angle based on where the ball hits the paddle
+        # This makes the game more interesting
+        relative_x = ball.xcor() - paddle.xcor()
+        normalized_x = relative_x / 40  # Normalize based on paddle width
+        ball.x_move = 15 * normalized_x  # Adjust horizontal direction based on hit position
+        
+        # Make sure the ball always moves upward after hitting the paddle
+        if ball.y_move < 0:
             ball.y_bounce()
 
     # Detect collision with bricks
