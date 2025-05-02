@@ -1,40 +1,50 @@
 from turtle import Turtle
 
-POSITION = [(-60,-300), (-40,-300), (-20,-300), (0,-300)]
-
 class Paddle(Turtle):
     def __init__(self, screen):
         super().__init__()
-        self.segments = []
-        self.screen = screen  # Store screen reference instead of creating a new one
-        self.create_reflector()
+        self.screen = screen
+        self.shape("square")
+        self.color("white")
+        self.shapesize(stretch_wid=1, stretch_len=8)  # Create a wide paddle
+        self.penup()
+        self.goto(0, -300)
+        self.speed("fastest")
         
-    def create_reflector(self):
-        self.screen.tracer(0)
-        for seg in POSITION:
-            new_turtle = Turtle('square')
-            new_turtle.penup()
-            new_turtle.color('white')  
-            new_turtle.goto(seg)  
-            self.segments.append(new_turtle)
-        self.screen.update()
-            
+        # Movement speed (pixels per move)
+        self.move_speed = 20
+        
     def on_right(self):
-        if self.segments[-1].xcor() < 470:
-            for turtles in range(len(self.segments) - 1):
-                x = self.segments[turtles + 1].xcor()
-                y = self.segments[turtles + 1].ycor()
-                self.segments[turtles].goto(x, y)
-            self.segments[-1].fd(20)
+        if self.xcor() < 420:  # Boundary check
+            self.setx(self.xcor() + self.move_speed)
             self.screen.update()
         
     def on_left(self):
-        if self.segments[0].xcor() > -470:
-            self.segments[0].setheading(180)
-            for turtles in range(len(self.segments) - 1, 0, -1):
-                x = self.segments[turtles - 1].xcor()
-                y = self.segments[turtles - 1].ycor()
-                self.segments[turtles].goto(x, y)
-            self.segments[0].fd(20)
-            self.segments[0].setheading(0)
+        if self.xcor() > -420:  # Boundary check
+            self.setx(self.xcor() - self.move_speed)
             self.screen.update()
+            
+    # Add continuous movement for smoother control
+    def start_move_right(self):
+        self.move_right = True
+        self.move_continuously()
+        
+    def start_move_left(self):
+        self.move_left = True
+        self.move_continuously()
+        
+    def stop_move_right(self):
+        self.move_right = False
+        
+    def stop_move_left(self):
+        self.move_left = False
+        
+    def move_continuously(self):
+        if hasattr(self, 'move_right') and self.move_right and self.xcor() < 420:
+            self.setx(self.xcor() + 10)  # Smaller increment for smoother movement
+            self.screen.update()
+            self.screen.ontimer(self.move_continuously, 10)  # Call again after 10ms
+        elif hasattr(self, 'move_left') and self.move_left and self.xcor() > -420:
+            self.setx(self.xcor() - 10)  # Smaller increment for smoother movement
+            self.screen.update()
+            self.screen.ontimer(self.move_continuously, 10)  # Call again after 10ms
