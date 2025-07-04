@@ -6,6 +6,11 @@ Welcome to the Breakout Game! This is a classic arcade game where you control a 
 
 To run this game, you'll need Python installed on your machine. You can download Python from [python.org](https://www.python.org/).
 
+
+### 👉 Preview:
+
+![image](https://github.com/user-attachments/assets/6c28849f-1742-46d9-842e-7765c68725ac)
+
 ### 👉 Step-by-Step Guide
 
 1. **Clone the repository**:
